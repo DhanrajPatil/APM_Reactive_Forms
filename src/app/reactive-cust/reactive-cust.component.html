@@ -1,0 +1,184 @@
+<div class="card">
+    <div class="card-header">
+        Reactive Customer Form
+    </div>
+
+    <div class="card-body">
+        <form [formGroup]="customerForm" (ngSubmit)="onSubmit()"> 
+            <div class="form-group row mb-2">
+                <label class="col-md-2 col-form-label" for="firstNameId"> FirstName </label>
+                <div class="col-md-8">
+                    <input class="form-control" 
+                        type="text"
+                        formControlName="firstName"
+                        placeholder="First Name(Required)"
+                        id="firstNameId"
+                        [ngClass]="{'is-invalid': errorMsgs['firstName']}" />
+                    <span class="invalid-feedback" *ngIf="errorMsgs['firstName']">
+                        {{errorMsgs['firstName']}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group mb-2 row">
+                <label class="col-md-2 col-form-label" for="lastNameId"> Last Name </label>
+                <div class="col-md-8">
+                    <input class="form-control"
+                            type="text"
+                            id="lastNameId" 
+                            placeholder="Last Name (required)"
+                            formControlName="lastName"
+                            [ngClass]="{'is-invalid': errorMsgs['lastName']}" />
+                    <span class="invalid-feedback" *ngIf="errorMsgs['lastName']">
+                        {{errorMsgs['lastName']}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group mb-2 row">
+                <label class="col-md-2 col-form-label" for="emailId"> Email </label>
+                <div class="col-md-8"> 
+                    <input class="form-control"
+                        type="email"
+                        id="emailId" 
+                        placeholder="Email Id"
+                        formControlName="email"
+                        [ngClass]="{'is-invalid': errorMsgs['email']}" />
+                    <span class="invalid-feedback" *ngIf="errorMsgs['email']">
+                        {{errorMsgs['email']}}
+                    </span>
+                </div> 
+            </div>
+
+            <div class="form-group mb-2 row">
+                <label class="col-form-label col-md-2" for="phoneId"> Phone </label>
+                <div class="col-md-8">
+                    <input class="form-control"
+                        type="tel" 
+                        id="phoneId"
+                        formControlName="phone"
+                        placeholder="Mobile Number"
+                        [ngClass]="{'is-invalid': errorMsgs['phone']}" />
+                    <span class="invalid-feedback" *ngIf="errorMsgs['phone']">
+                        {{errorMsgs['phone']}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row form-group mb-2">
+                <label class="col-form-label col-md-2 pt-0"> Notify Via </label>
+                <div class="col-md-8">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" 
+                                    formControlName="notifyVia" 
+                                    type="radio" value="email">
+                            Email 
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" 
+                                    formControlName="notifyVia" 
+                                    type="radio" value="text">
+                            Text
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-form-label col-md-2" for="birthDateId"> Birth Date </label>
+                <div class="col-md-8">
+                    <input class="form-control"
+                            id="birthDateId"
+                            formControlName="birthDate"
+                            type="date"
+                            max="2004-01-24"
+                            placeholder="Birth Date"
+                            [ngClass]="{'is-invalid': errorMsgs['birthDate']}"/>
+                    <span class="invalid-feedback" *ngIf="errorMsgs['birthDate']">
+                        {{errorMsgs['birthDate']}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group mb-2 row"> 
+                <div class="col-md-8">
+                    <div clas="form-check"> 
+                        <label class="form-check-label"> 
+                            <input class="form-check-input"
+                                type="checkbox"
+                                formControlName="sendCatalogue"/>
+                                Send me your catalog
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-2 row">
+                <div class="offset-md-2 col-md-2"> 
+                    <button class="btn btn-primary" type="submit"
+                        style="width: 180px;"
+                        [disabled]="!customerForm.valid"
+                        [title]="customerForm.valid ? 'Save Your changes' : 'Disabled until form data is valid' ">
+                         Save 
+                    </button>
+                </div>
+
+                <div class="col-md-2"> 
+                    <button class="btn btn-primary"
+                        style="width: 180px;"
+                        (click)="clearData()">
+                        Reset
+                    </button>
+                </div>
+
+                <div class="col-md-2"> 
+                    <button class="btn btn-primary"
+                        style="width: 180px;"
+                        (click)="setTestData()">
+                         Set Data 
+                    </button>
+                </div>
+
+                <div class="col-md-3"> 
+                    <button class="btn btn-primary"
+                        style="width: 180px;"
+                        (click)="patchData()">
+                         Patch Data 
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group mb-2 row">
+                <div class="offset-md-2 col-md-2"> 
+                    <button class="btn btn-primary"
+                        style="width: 180px;"
+                        (click)="getValue()">
+                        Get Value
+                    </button>
+                </div>
+
+                <div class="offset-md-2  col-md-2"> 
+                    <button class="btn btn-primary"
+                        style="width: 180px;"
+                        (click)="getRawValue()">
+                         Get Raw Value 
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="form-group mb-2 row">
+                <div class="offset-md-1 col-md-4" *ngIf="formValue"> 
+                    <span> Value: {{formValue | json}} </span>
+                </div>
+
+                <div class="offset-md-1 col-md-4" *ngIf="rawValue"> 
+                    <span> Raw Value: {{rawValue | json}} </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

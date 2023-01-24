@@ -4,20 +4,21 @@ import { NgForm } from '@angular/forms';
 import { Customer } from './customer';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+    selector: 'app-customer',
+    templateUrl: './customer.component.html',
+    styleUrls: ['./customer.component.css']
 })
 export class CustomerComponent implements OnInit {
-  customer = new Customer();
+    customer = new Customer();
 
-  constructor() { }
+    constructor() { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
-  save(customerForm: NgForm): void {
-    console.log(customerForm.form);
-    console.log('Saved: ' + JSON.stringify(customerForm.value));
-  }
+    save(customerForm: NgForm): void {
+        console.log(this.customer);
+        console.log(customerForm.form);
+        console.log('Saved: ' + JSON.stringify(customerForm.value));
+    }
 }

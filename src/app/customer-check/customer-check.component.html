@@ -1,0 +1,57 @@
+<div class="card">
+    <div class="card-header">
+        <span> Customer tempalate2 </span>
+    </div>
+    <div class="card-body">
+        <form novalidate #customerForm="ngForm">
+            <div class="form-group row position-relative mb-3">
+                <label class="col-md-2" for="firstNameId"> First Name </label>
+                <div class="col-md-6">
+                    <input type="text" id="firstName"
+                        class="form-control"
+                        placeholder="First Name (Required)"
+                        name="firstName"
+                        [(ngModel)]="customer.firstName" 
+                        required minlength="3" 
+                        #firstNameVar="ngModel"
+                        [ngClass]="{'is-invalid': (firstNameVar.dirty || firstNameVar.touched) && !firstNameVar.valid}" />
+                    <div class="invalid-tooltip">
+                        <span *ngIf="firstNameVar.errors?.required">
+                            Please complete the First Name
+                        </span>
+                        <span *ngIf="firstNameVar.errors?.minlength">
+                            Please enter min 3 char
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row position-relative mb-3">
+                <label class="col-md-2 col-form-label" for="lastNameId"> Last Name </label> 
+                <div class="col-md-6">
+                    <input class="form-control"
+                            id="lastNameId"
+                            placeholder=" Last Name (Required)"
+                            name="lastName"
+                            type="text"
+                            [(ngModel)]=customer.lastName
+                            #lastNameVar="ngModel"
+                            required maxlength="15"
+                            [ngClass]="{'is-invalid': (lastNameVar.dirty || lastNameVar.touched) && !lastNameVar.valid}" />
+                    <div class="invalid-tooltip">
+                        <span *ngIf="lastNameVar.errors?.required">
+                            Please enter the value
+                        </span>
+                        <span *ngIf="lastNameVar.errors?.maxlength">
+                            Maximum 15 char are allowed
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" (click)="submitForm(customerForm)"> Submit
+            </button>
+        </form>
+    </div>
+
+</div>
