@@ -6,7 +6,10 @@
     <div class="card-body">
         <form [formGroup]="customerForm" (ngSubmit)="onSubmit()"> 
             <div class="form-group row mb-2">
-                <label class="col-md-2 col-form-label" for="firstNameId"> FirstName </label>
+                <label class="col-md-2 col-form-label" for="firstNameId"> 
+                    FirstName 
+                    <span style="color: red"> * </span>
+                </label>
                 <div class="col-md-8">
                     <input class="form-control" 
                         type="text"
@@ -21,7 +24,10 @@
             </div>
 
             <div class="form-group mb-2 row">
-                <label class="col-md-2 col-form-label" for="lastNameId"> Last Name </label>
+                <label class="col-md-2 col-form-label" for="lastNameId">
+                    Last Name 
+                    <span style="color: red"> * </span>
+                </label>
                 <div class="col-md-8">
                     <input class="form-control"
                             type="text"
@@ -36,7 +42,10 @@
             </div>
 
             <div class="form-group mb-2 row">
-                <label class="col-md-2 col-form-label" for="emailId"> Email </label>
+                <label class="col-md-2 col-form-label" for="emailId">
+                    Email 
+                    <span style="color: red"> * </span>
+                </label>
                 <div class="col-md-8"> 
                     <input class="form-control"
                         type="email"
@@ -87,8 +96,11 @@
                 </div>
             </div>
 
-            <div class="form-group row mb-2">
-                <label class="col-form-label col-md-2" for="birthDateId"> Birth Date </label>
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-md-2" for="birthDateId">
+                    Birth Date 
+                    <span style="color: red"> * </span>
+                </label>
                 <div class="col-md-8">
                     <input class="form-control"
                             id="birthDateId"
@@ -103,15 +115,139 @@
                 </div>
             </div>
 
-            <div class="form-group mb-2 row"> 
-                <div class="col-md-8">
-                    <div clas="form-check"> 
-                        <label class="form-check-label"> 
-                            <input class="form-check-input"
-                                type="checkbox"
-                                formControlName="sendCatalogue"/>
-                                Send me your catalog
-                        </label>
+            <div class="card mb-3 offset-md-2 " style="width: 600px;">
+                <div class="card-header">
+                    <label class="" for="startYearId">
+                        Education Span 
+                        <span style="color: red"> * </span>
+                    </label>
+                </div>
+                <div class="card-body">
+                    <div formGroupName="educationSpan">
+                        <div class="row form-group mb-2">
+                            <label class="col-form-label offset-md-1 col-md-3" for="startYearId"> Start Year: </label>
+                            <div class="col-md-6">
+                                <input class="form-control"
+                                    type="month"
+                                    id="startYearId"
+                                    placeholder="Start Date"
+                                    formControlName="startYear"
+                                    [ngClass]="{'is-invalid': errorMsgs['startYear'] || errorMsgs['educationSpan']}"/>
+                                <span class="invalid-feedback" *ngIf="errorMsgs['startYear']">
+                                    {{errorMsgs['startYear']}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-form-label offset-md-1 col-md-3" for="endYearId"> End Year: </label>
+                            <div class="col-md-6">
+                                <input class="form-control"
+                                        id="endYearId" 
+                                        type="month"
+                                        formControlName="endYear"
+                                        [ngClass]="{'is-invalid': errorMsgs['endYear'] || errorMsgs['educationSpan']}"/>
+                                <span class="invalid-feedback" *ngIf="errorMsgs['endYear']">
+                                    {{errorMsgs['endYear']}}
+                                </span>
+                                <span class="invalid-feedback" *ngIf="errorMsgs['educationSpan'] && !errorMsgs['endYear']">
+                                    {{errorMsgs['educationSpan']}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3 col-md-10" >
+                <div class="card-header">
+                    <label class="" for="startYearId"> Work Experiences </label>
+                    <i class="fa fa-plus float-end mt-1" (click)="addWorkExperience()"></i>
+                </div>
+                <div class="card-body">
+                    <div class="accordion form-control" id="accordionExample" [ngClass]="{'is-invalid': errorMsgs['workExperiences']}">
+                        <div formArrayName="workExperiences" *ngFor="let experince of workExperiences.controls; index as i">
+                            <div class="accordion-item offset-md-2" [formGroupName]="i">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" 
+                                        [ngClass]="{'collapsed': !experiencesAccordians[i]}"
+                                        type="button" (click)="toggleExperiencesAccordians(i)">
+                                        <span>
+                                            <button mat-icon-button title="Remove Experience" [disabled]="isExperienceDisabled()"
+                                                class="cust-icon-button" (click)="deleteExperience(i, $event)">
+                                                 <mat-icon>delete</mat-icon>
+                                                Delete
+                                            </button>
+                                            Experience #{{i + 1}}
+                                        </span>
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body" *ngIf="experiencesAccordians[i]" 
+                                            [ngClass]="{'is-invalid': errorMsgs['workExperiences' + i]}">
+                                        <div class="form-group mb-2 row">
+                                            <label class="col-form-label col-md-3" [attr.for]="getControlId('companyId' , i)"> Company: </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control"
+                                                        [attr.id]="getControlId('companyId' , i)"
+                                                        type="text"
+                                                        formControlName="company"
+                                                        [ngClass]="{'is-invalid': errorMsgs['company' + i]}" />
+                                                <span class="invalid-feedback" *ngIf="errorMsgs['company'+ i]">
+                                                    {{errorMsgs['company' + i]}}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2 row">
+                                            <label class="col-form-label col-md-3" [attr.for]="getControlId('startDateId' , i)"> Start Date: </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control"
+                                                        [attr.id]="getControlId('startDateId' , i)"
+                                                        type="date"
+                                                        formControlName="startDate"
+                                                        [ngClass]="{'is-invalid': errorMsgs['startDate' + i] || errorMsgs['workExperiences' + i]}" />
+                                                <span class="invalid-feedback" *ngIf="errorMsgs['startDate' + i]">
+                                                    {{errorMsgs['startDate' + i]}}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2 row">
+                                            <label class="col-form-label col-md-3" [attr.for]="getControlId('endDateId' , i)"> End Date: </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control"
+                                                        [attr.id]="getControlId('endDateId' , i)"
+                                                        type="date"
+                                                        formControlName="endDate"
+                                                        [ngClass]="{'is-invalid': errorMsgs['endDate' + i] || errorMsgs['workExperiences' + i]}" />
+                                                <span class="invalid-feedback" *ngIf="errorMsgs['endDate' + i] || errorMsgs['workExperiences' + i]">
+                                                    <span *ngIf="errorMsgs['endDate' + i]" > {{errorMsgs['endDate' + i]}} </span>
+                                                    <span *ngIf="errorMsgs['workExperiences' + i]"> {{errorMsgs['workExperiences' + i]}} </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-2 row">
+                                            <div class="col-md-8">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" id="isThisCurrentCompanyId" type="checkbox"
+                                                            formControlName="isThisCurrentCompany"> Current Company
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="invalid-feedback" *ngIf="">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="errorMsgs['workExperiences']">
+                        {{errorMsgs['workExperiences']}}
                     </div>
                 </div>
             </div>
@@ -122,7 +258,7 @@
                         style="width: 180px;"
                         [disabled]="!customerForm.valid"
                         [title]="customerForm.valid ? 'Save Your changes' : 'Disabled until form data is valid' ">
-                         Save 
+                        Save 
                     </button>
                 </div>
 
@@ -138,7 +274,7 @@
                     <button class="btn btn-primary"
                         style="width: 180px;"
                         (click)="setTestData()">
-                         Set Data 
+                        Set Data 
                     </button>
                 </div>
 
@@ -146,7 +282,7 @@
                     <button class="btn btn-primary"
                         style="width: 180px;"
                         (click)="patchData()">
-                         Patch Data 
+                        Patch Data 
                     </button>
                 </div>
             </div>
@@ -164,7 +300,7 @@
                     <button class="btn btn-primary"
                         style="width: 180px;"
                         (click)="getRawValue()">
-                         Get Raw Value 
+                        Get Raw Value 
                     </button>
                 </div>
             </div>
